@@ -58,21 +58,20 @@ uploaded_image = st.file_uploader('Choose an image')
 
 if uploaded_image is not None:
     # save the image in a directory
-    if save_uploaded_image(uploaded_image):
         # load the image
-        display_image = Image.open(uploaded_image)
+    display_image = Image.open(uploaded_image)
 
         # extract the features
-        features = extract_features(os.path.join('uploads',uploaded_image.name),model,detector)
+    features = extract_features(os.path.join('uploads',uploaded_image.name),model,detector)
         # recommend
-        index_pos = recommend(feature_list,features)
-        predicted_actor = " ".join(filenames[index_pos].split('\\')[1].split('_'))
+    index_pos = recommend(feature_list,features)
+    predicted_actor = " ".join(filenames[index_pos].split('\\')[1].split('_'))
         # display
-        col1,col2 = st.beta_columns(2)
+    col1,col2 = st.beta_columns(2)
 
-        with col1:
-            st.header('Your uploaded image')
-            st.image(display_image)
-        with col2:
-            st.header("Seems like " + predicted_actor)
-            st.image(filenames[index_pos],width=300)
+    with col1:
+        st.header('Your uploaded image')
+        st.image(display_image)
+    with col2:
+        st.header("Seems like " + predicted_actor)
+        st.image(filenames[index_pos],width=300)
