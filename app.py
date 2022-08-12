@@ -35,6 +35,7 @@ def extract_features(img, model, detector):
     expanded_img = np.expand_dims(face_array, axis=0)
     preprocessed_img = preprocess_input(expanded_img)
     result = model.predict(preprocessed_img).flatten()
+
     return result
 
 def recommend(feature_list,features):
@@ -50,12 +51,31 @@ st.title('Which bollywood celebrity are you?')
 uploaded_image = st.file_uploader('Choose an image')
 
 if uploaded_image is not None:
-    # save the image in a directory
         # load the image
     display_image = Image.open(uploaded_image)
 
         # extract the features
-    features = extract_features(uploaded_image, model, detector)
+    #features = extract_features(uploaded_image, model, detector)
+
+    results = detector.detect_faces(uploaded_image)
+
+    x, y, width, height = results[0]['box']
+
+    face = uploaded_image[y:y + height, x:x + width]
+
+    #  extract its features
+    image = Image.fromarray(face)
+    image = image.resize((224, 224))
+
+    face_array = np.asarray(image)
+
+    face_array = face_array.astype('float32')
+
+    expanded_img = np.expand_dims(face_array, axis=0)
+    preprocessed_img = preprocess_input(expanded_img)
+    features = model.predict(preprocessed_img).flatten()
+
+
         # recommend
     index_pos = recommend(feature_list,features)
     predicted_actor = " ".join(filenames[index_pos].split('\\')[1].split('_'))
