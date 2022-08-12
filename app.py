@@ -91,7 +91,7 @@ else:
 
     with col1:
         st.header('Your uploaded image')
-        st.image(display_image)
+        st.image(sample_image)
     with col2:
         st.header("Seems like " + predicted_actor)
         st.image(filenames[index_pos],width=300)
