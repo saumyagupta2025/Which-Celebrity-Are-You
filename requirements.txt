@@ -1,4 +1,4 @@
-numpy
+numpy==1.17.0
 pandas
 keras_applications==1.0.8
 keras==2.4.3
@@ -9,3 +9,4 @@ cloudpickle
 tqdm
 opencv-python
 Pillow
+scikit-learn
