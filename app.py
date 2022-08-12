@@ -62,7 +62,7 @@ if uploaded_image is not None:
     display_image = Image.open(uploaded_image)
 
         # extract the features
-    features = extract_features(os.path.join('uploads',uploaded_image.name),model,detector)
+    features = extract_features(os.path.join(uploaded_image,model,detector)
         # recommend
     index_pos = recommend(feature_list,features)
     predicted_actor = " ".join(filenames[index_pos].split('\\')[1].split('_'))
