@@ -15,16 +15,9 @@ model = VGGFace(model='resnet50',include_top=False,input_shape=(224,224,3),pooli
 feature_list = pickle.load(open('embedding.pkl','rb'))
 filenames = pickle.load(open('filenames.pkl','rb'))
 
-def save_uploaded_image(uploaded_image):
-    try:
-        with open(os.path.join('uploads',uploaded_image.name),'wb') as f:
-            f.write(uploaded_image.getbuffer())
-        return True
-    except:
-        return False
 
-def extract_features(img_path,model,detector):
-    img = cv2.imread(img_path)
+def extract_features(img, model, detector):
+    #img = cv2.imread(img_path)
     results = detector.detect_faces(img)
 
     x, y, width, height = results[0]['box']
@@ -62,7 +55,7 @@ if uploaded_image is not None:
     display_image = Image.open(uploaded_image)
 
         # extract the features
-    features = extract_features(uploaded_image,model,detector)
+    features = extract_features(uploaded_image, model, detector)
         # recommend
     index_pos = recommend(feature_list,features)
     predicted_actor = " ".join(filenames[index_pos].split('\\')[1].split('_'))
