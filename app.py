@@ -2,6 +2,7 @@
 from keras_vggface.utils import preprocess_input
 from keras_vggface.vggface import VGGFace
 import pickle
+from tensorflow.keras.preprocessing import image
 from sklearn.metrics.pairwise import cosine_similarity
 import streamlit as st
 from PIL import Image
