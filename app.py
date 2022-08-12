@@ -50,34 +50,41 @@ st.title('Which bollywood celebrity are you?')
 
 uploaded_image = st.file_uploader('Choose an image')
 
-if uploaded_image is not None:
-        # load the image
-    display_image = Image.open(uploaded_image)
-    sample_image = cv2.imread(uploaded_image)
+buffer = uploaded_image
+temp_file = NamedTemporaryFile(delete=False)
+
+if buffer:
+        temp_file.write(buffer.getvalue())
+        st.write(image.load_img(temp_file.name))
+
+    if buffer is None:
+        st.text("Please upload a image")
+
+    else:
         # extract the features
     #features = extract_features(uploaded_image, model, detector)
+        sample_image = image.load_img(temp_file.name, target_size=(224,224))
+        results = detector.detect_faces(sample_image)
 
-    results = detector.detect_faces(sample_image)
+        x, y, width, height = results[0]['box']
 
-    x, y, width, height = results[0]['box']
-
-    face = sample_image[y:y + height, x:x + width]
+        face = sample_image[y:y + height, x:x + width]
 
     #  extract its features
-    image = Image.fromarray(face)
-    image = image.resize((224, 224))
+        image = Image.fromarray(face)
+        image = image.resize((224, 224))
 
-    face_array = np.asarray(image)
+        face_array = np.asarray(image)
 
-    face_array = face_array.astype('float32')
+        face_array = face_array.astype('float32')
 
-    expanded_img = np.expand_dims(face_array, axis=0)
-    preprocessed_img = preprocess_input(expanded_img)
-    features = model.predict(preprocessed_img).flatten()
+        expanded_img = np.expand_dims(face_array, axis=0)
+        preprocessed_img = preprocess_input(expanded_img)
+        features = model.predict(preprocessed_img).flatten()
 
         # recommend
-    index_pos = recommend(feature_list,features)
-    predicted_actor = " ".join(filenames[index_pos].split('\\')[1].split('_'))
+        index_pos = recommend(feature_list,features)
+        predicted_actor = " ".join(filenames[index_pos].split('\\')[1].split('_'))
         # display
     col1,col2 = st.beta_columns(2)
 
