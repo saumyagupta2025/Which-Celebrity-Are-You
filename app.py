@@ -53,15 +53,15 @@ uploaded_image = st.file_uploader('Choose an image')
 if uploaded_image is not None:
         # load the image
     display_image = Image.open(uploaded_image)
-
+    sample_image = cv2.imread(uploaded_image)
         # extract the features
     #features = extract_features(uploaded_image, model, detector)
 
-    results = detector.detect_faces(uploaded_image)
+    results = detector.detect_faces(sample_image)
 
     x, y, width, height = results[0]['box']
 
-    face = uploaded_image[y:y + height, x:x + width]
+    face = sample_image[y:y + height, x:x + width]
 
     #  extract its features
     image = Image.fromarray(face)
@@ -74,7 +74,6 @@ if uploaded_image is not None:
     expanded_img = np.expand_dims(face_array, axis=0)
     preprocessed_img = preprocess_input(expanded_img)
     features = model.predict(preprocessed_img).flatten()
-
 
         # recommend
     index_pos = recommend(feature_list,features)
